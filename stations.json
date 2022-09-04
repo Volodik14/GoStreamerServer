@@ -1,0 +1,56 @@
+[
+    {
+        "stationId": "0",
+        "stationURL": "http://185.155.19.32:8080/0",
+        "stationImageURL": "https://i.pinimg.com/236x/0d/ac/26/0dac2673f298bb18bc5e6e1d1107521a--radios.jpg",
+        "stationDescription": "101 Radio",
+        "stationTitle": "Best 101 Radio",
+        "currentTrackName": "Track 322",
+        "currentTrackImageURL": "https://mir-s3-cdn-cf.behance.net/projects/202/697555120438133.Y3JvcCwyNzQwLDIxNDMsNzQ2OSwxMDcx.png"
+    },
+    {
+        "stationId": "1",
+        "stationURL": "http://185.155.19.32:8080/1",
+        "stationImageURL": "https://i.pinimg.com/736x/50/3c/a9/503ca9da67f53eb95240ac6c31733aaa.jpg",
+        "stationDescription": "Second Radio",
+        "stationTitle": "Best Second Radio",
+        "currentTrackName": "nvr gnn gvu",
+        "currentTrackImageURL": "https://i.pinimg.com/736x/50/3c/a9/503ca9da67f53eb95240ac6c31733aaa.jpg"
+    },
+    {
+        "stationId": "2",
+        "stationURL": "http://185.155.19.32:8080/2",
+        "stationImageURL": "https://c0.klipartz.com/pngpicture/282/880/sticker-png-logo-radio-program-breakfast-television-television-show-radio-electronics-orange-logo-internet-radio-technology-thumbnail.png",
+        "stationDescription": "Third Radio",
+        "stationTitle": "Best Third Radio",
+        "currentTrackName": "nvr gnn gvu",
+        "currentTrackImageURL": "https://i.pinimg.com/736x/50/3c/a9/503ca9da67f53eb95240ac6c31733aaa.jpg"
+    },
+    {
+        "stationId": "3",
+        "stationURL": "http://185.155.19.32:8080/3",
+        "stationImageURL": "https://i.pinimg.com/originals/bf/a3/86/bfa386e76bac6c9f4939f9014b65af30.jpg",
+        "stationDescription": "Fourth Radio",
+        "stationTitle": "Best Fourth Radio",
+        "currentTrackName": "nvr gnn gvu",
+        "currentTrackImageURL": "https://i.pinimg.com/736x/50/3c/a9/503ca9da67f53eb95240ac6c31733aaa.jpg"
+    },
+    {
+        "stationId": "4",
+        "stationURL": "http://185.155.19.32:8080/3",
+        "stationImageURL": "https://i.pinimg.com/originals/dc/a8/d5/dca8d5e5ea3fc47514465480cb0508e6.jpg",
+        "stationDescription": "Fifth Radio",
+        "stationTitle": "Best Fifth Radio",
+        "currentTrackName": "nvr gnn gvu",
+        "currentTrackImageURL": "https://i.pinimg.com/736x/50/3c/a9/503ca9da67f53eb95240ac6c31733aaa.jpg"
+    },
+    {
+        "stationId": "5",
+        "stationURL": "http://185.155.19.32:8080/3",
+        "stationImageURL": "https://mir-s3-cdn-cf.behance.net/projects/404/506ff570306155.Y3JvcCwxMTExLDg2OSw0NjIsMTQz.jpg",
+        "stationDescription": "Sixth Radio",
+        "stationTitle": "Best Sixth Radio",
+        "currentTrackName": "nvr gnn gvu",
+        "currentTrackImageURL": "https://i.pinimg.com/736x/50/3c/a9/503ca9da67f53eb95240ac6c31733aaa.jpg"
+    }
+]
