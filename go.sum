@@ -13,6 +13,8 @@ github.com/gordonklaus/portaudio v0.0.0-20220320131553-cc649ad523c1/go.mod h1:Hf
 github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=
 github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
+github.com/graarh/golang-socketio v0.0.0-20170510162725-2c44953b9b5f h1:utzdm9zUvVWGRtIpkdE4+36n+Gv60kNb7mFvgGxLElY=
+github.com/graarh/golang-socketio v0.0.0-20170510162725-2c44953b9b5f/go.mod h1:8gudiNCFh3ZfvInknmoXzPeV17FSH+X2J5k2cUPIwnA=
 github.com/hichuyamichu/radio-app v0.0.0-20190913124214-6c8b63a9063b h1:8nIIlKBiHbKOsif/KzECEm5TAT7F3ynnpGpYF0FXN7Q=
 github.com/hichuyamichu/radio-app v0.0.0-20190913124214-6c8b63a9063b/go.mod h1:KtcX3meitG3U69tM1dP20tpUbmeFwxqA96smvl2QtVM=
 github.com/labstack/echo v3.3.10+incompatible h1:pGRcYk231ExFAyoAjAfD85kQzRJCRI8bbnE7CX5OEgg=

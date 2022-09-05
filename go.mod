@@ -9,6 +9,7 @@ require (
 	github.com/googollee/go-socket.io v1.6.2 // indirect
 	github.com/gordonklaus/portaudio v0.0.0-20220320131553-cc649ad523c1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
+	github.com/graarh/golang-socketio v0.0.0-20170510162725-2c44953b9b5f // indirect
 	github.com/hichuyamichu/radio-app v0.0.0-20190913124214-6c8b63a9063b // indirect
 	github.com/labstack/echo v3.3.10+incompatible // indirect
 	github.com/labstack/gommon v0.3.1 // indirect

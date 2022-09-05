@@ -11,9 +11,13 @@ import (
 	"net"
 	"net/http"
 	"os"
+
 	//"os/signal"
 	//"github.com/bobertlo/go-mpg123/mpg123"
 	//"github.com/gordonklaus/portaudio"
+	socketio "github.com/googollee/go-socket.io"
+	"github.com/labstack/echo"
+	//
 )
 
 var gotApiRequest = false
@@ -76,6 +80,7 @@ func main() {
 			http.Error(w, "Invalid request method.", 405)
 		}
 	})
+	trackDidChange = true
 
 	http.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
@@ -95,18 +100,19 @@ func main() {
 		}
 	})
 
-	http.ListenAndServe(":8080", nil)
+	go http.ListenAndServe(":8080", nil)
 
-	//TODO: Добавить API для админки.
-	listener, _ := net.Listen("tcp", "localhost:8081") // открываем слушающий сокет
-	for {
-		conn, err := listener.Accept() // принимаем TCP-соединение от клиента и создаем новый сокет
-		if err != nil {
-			continue
-		}
-		go handleClient(conn) // обрабатываем запросы клиента в отдельной го-рутине
-	}
+	// //TODO: Добавить API для админки.
+	// listener, _ := net.Listen("tcp", "localhost:8081") // открываем слушающий сокет
+	// for {
+	// 	conn, err := listener.Accept() // принимаем TCP-соединение от клиента и создаем новый сокет
+	// 	if err != nil {
+	// 		continue
+	// 	}
+	// 	go handleClient(conn) // обрабатываем запросы клиента в отдельной го-рутине
+	// }
 
+	startSocketServer()
 }
 
 func handleClient(conn net.Conn) {
@@ -162,4 +168,50 @@ func loadData() {
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
 	json.Unmarshal(byteValue, &stations)
+}
+
+func startSocketServer() {
+	server := socketio.NewServer(nil)
+
+	server.OnConnect("/", func(s socketio.Conn) error {
+		s.SetContext("")
+		fmt.Println("Connected")
+		log.Println("connected:", s.ID())
+		go socketHandler(s)
+		return nil
+	})
+
+	server.OnEvent("/", "notice", func(s socketio.Conn, msg string) {
+		log.Println("notice:", msg)
+		s.Emit("reply", "have "+msg)
+	})
+
+	server.OnError("/", func(s socketio.Conn, e error) {
+		log.Println("meet error:", e)
+	})
+
+	server.OnDisconnect("/", func(s socketio.Conn, reason string) {
+		log.Println("closed", reason)
+	})
+
+	go server.Serve()
+	defer server.Close()
+
+	e := echo.New()
+	e.HideBanner = true
+
+	e.Static("/", "../asset")
+	e.Any("/socket.io/", func(context echo.Context) error {
+		server.ServeHTTP(context.Response(), context.Request())
+		return nil
+	})
+	e.Logger.Fatal(e.Start(":8081"))
+}
+
+func socketHandler(s socketio.Conn) {
+	for {
+		if trackDidChange {
+			s.Emit("", "Hello")
+		}
+	}
 }
