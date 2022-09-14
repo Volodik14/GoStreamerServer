@@ -27,6 +27,7 @@ func Start(stationId int, storePath string) {
 		for _, file := range files {
 			fName := file.Name()
 			stations[stationId].CurrentTrackName = fName
+			changedStationId = stationId
 			fmt.Println(fName)
 			if filepath.Ext(fName) != ".mp3" {
 				continue

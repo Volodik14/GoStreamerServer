@@ -8,7 +8,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net"
+
+	//"net"
 	"net/http"
 	"os"
 
@@ -23,6 +24,8 @@ import (
 var gotApiRequest = false
 var apiRequest = ""
 var trackDidChange = false
+var stationsDidChange = false
+var changedStationId = 0
 
 type Station struct {
 	StationId            string `json:"stationId"`
@@ -83,7 +86,7 @@ func main() {
 	trackDidChange = true
 
 	http.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
+		if r.Method == "POST" {
 			query := r.URL.Query()
 			request := query.Get("request")
 			w.WriteHeader(200)
@@ -115,27 +118,30 @@ func main() {
 	startSocketServer()
 }
 
-func handleClient(conn net.Conn) {
-	// station := Station{StationId: "1", StationURL: "2", StationImageURL: "3", StationDescription: "4", StationTitle: "Title", CurrentTrackName: "6", CurrentTrackImageURL: "12"}
-	// var stations [1]Station
-	// stations[0] = station
-	answer := SocketAnswer{Event: "stationsDidChange", Stations: stations[:]}
-	defer conn.Close() // закрываем сокет при выходе из функции
-	for {
-		if gotApiRequest {
-			if trackDidChange {
-				answer = SocketAnswer{Event: "stationsDidChange", Stations: stations[:]}
-			}
-			jsonResp, err := json.Marshal(answer.Stations)
-			if err != nil {
-				fmt.Println(err)
-				//return
-			}
-			conn.Write(jsonResp) // пишем в сокет
-			gotApiRequest = false
-		}
-	}
-}
+// func handleClient(conn net.Conn) {
+// 	// station := Station{StationId: "1", StationURL: "2", StationImageURL: "3", StationDescription: "4", StationTitle: "Title", CurrentTrackName: "6", CurrentTrackImageURL: "12"}
+// 	// var stations [1]Station
+// 	// stations[0] = station
+// 	answer := SocketAnswer{Event: "stationsDidChange", Stations: stations[:]}
+// 	defer conn.Close() // закрываем сокет при выходе из функции
+// 	for {
+// 		if gotApiRequest {
+// 			if trackDidChange {
+// 				answer = SocketAnswer{Event: "stationsDidChange", Stations: stations[:]}
+// 			}
+// 			if apiRequest == "updateStations" {
+// 				stationsDidChange = true
+// 			}
+// 			jsonResp, err := json.Marshal(answer.Stations)
+// 			if err != nil {
+// 				fmt.Println(err)
+// 				//return
+// 			}
+// 			conn.Write(jsonResp) // пишем в сокет
+// 			gotApiRequest = false
+// 		}
+// 	}
+// }
 
 func chk(err error) {
 	if err != nil {
@@ -146,8 +152,9 @@ func chk(err error) {
 func checkDidChange() {
 	for {
 		if gotApiRequest {
-			if apiRequest == "stationsDidChange" {
+			if apiRequest == "updateStations" {
 				loadData()
+				stationsDidChange = true
 			}
 			if apiRequest == "trackDidChange" {
 				trackDidChange = true
@@ -211,7 +218,13 @@ func startSocketServer() {
 func socketHandler(s socketio.Conn) {
 	for {
 		if trackDidChange {
-			s.Emit("", "Hello")
+			trackDidChange = false
+			var data = stations[changedStationId]
+			s.Emit("CurrentTrackDidChange", data)
+		}
+		if stationsDidChange {
+			stationsDidChange = false
+			s.Emit("StationsDidChange", stations)
 		}
 	}
 }
