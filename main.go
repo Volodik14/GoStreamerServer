@@ -52,11 +52,19 @@ func main() {
 
 	go checkDidChange()
 
+	for i := 0; i < 2; i++ {
+		c[i].buffer = make([]byte, 40000)
+		c[i].done = make(chan struct{})
+	}
+
 	//var handlers [2]*http.ServeMux
 	log.SetFlags(0)
-	go Start(0, "0/songs")
-	NewHandler(0)
+	//go Start(0, "0/songs")
+	go NewHandler(0)
 	fmt.Println(0)
+	//go Start(1, "1/songs")
+	go NewHandler(1)
+	fmt.Println(1)
 	// for i, station := range stations {
 	// 	log.SetFlags(0)
 	// 	go Start(i, station.StationId+"/songs")

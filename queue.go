@@ -40,7 +40,7 @@ func Start(stationId int, storePath string) {
 			}
 
 			go c[stationId].Load(f)
-			<-done
+			<-c[stationId].done
 			apiRequest = "trackDidChange"
 			gotApiRequest = true
 		}

@@ -7,10 +7,16 @@ import (
 )
 
 func NewHandler(stationId int) {
-	//router := http.NewServeMux()
-	http.HandleFunc("/"+fmt.Sprintf("%v", stationId), func(w http.ResponseWriter, r *http.Request) {
+	router := http.NewServeMux()
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		serve(w, r, stationId)
 	})
+	server := http.Server{
+		Addr:    fmt.Sprintf(":%v", 8000+stationId), // :{port}
+		Handler: router,
+	}
+	go server.ListenAndServe()
+	go Start(stationId, fmt.Sprintf("%v", stationId)+"/songs")
 }
 
 func serve(w http.ResponseWriter, r *http.Request, stationId int) {
