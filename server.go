@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -16,7 +17,7 @@ func NewHandler(stationId int) {
 		Handler: router,
 	}
 	go server.ListenAndServe()
-	go Start(stationId, fmt.Sprintf("%v", stationId)+"/songs")
+	go Start(stationId, fmt.Sprintf("%v", "resources/"+strconv.Itoa(stationId))+"/songs")
 }
 
 func serve(w http.ResponseWriter, r *http.Request, stationId int) {

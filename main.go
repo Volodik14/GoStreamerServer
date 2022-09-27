@@ -173,7 +173,7 @@ func checkDidChange() {
 }
 
 func loadData() {
-	jsonFile, err := os.Open("stations.json")
+	jsonFile, err := os.Open("resources/stations.json")
 	if err != nil {
 		fmt.Println(err)
 	}
