@@ -10,8 +10,7 @@ import (
 	"time"
 )
 
-// Менять при разном количестве станций!!
-var c [2]chunk
+var c []chunk
 
 //var c chunk
 

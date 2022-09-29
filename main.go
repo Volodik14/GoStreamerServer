@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"log"
 
-	//"net"
 	"net/http"
 	"os"
 
@@ -18,7 +17,6 @@ import (
 	//"github.com/gordonklaus/portaudio"
 	socketio "github.com/googollee/go-socket.io"
 	"github.com/labstack/echo"
-	//
 )
 
 var gotApiRequest = false
@@ -44,7 +42,7 @@ type SocketAnswer struct {
 
 var stations []Station
 
-var addr = flag.String("addr", "localhost:8080", "http service address")
+var addr = flag.String("addr", "localhost:9090", "http service address")
 var store = flag.String("store", "./store", "path to mp3 storage")
 
 func main() {
@@ -52,28 +50,7 @@ func main() {
 
 	go checkDidChange()
 
-	for i := 0; i < 2; i++ {
-		c[i].buffer = make([]byte, 40000)
-		c[i].done = make(chan struct{})
-	}
-
-	//var handlers [2]*http.ServeMux
-	log.SetFlags(0)
-	//go Start(0, "0/songs")
-	go NewHandler(0)
-	fmt.Println(0)
-	//go Start(1, "1/songs")
-	go NewHandler(1)
-	fmt.Println(1)
-	// for i, station := range stations {
-	// 	log.SetFlags(0)
-	// 	go Start(i, station.StationId+"/songs")
-	// 	handlers[i] = NewHandler(i)
-	// 	fmt.Println(i)
-	// }
-	// for i, _ := range stations {
-	// 	go log.Fatal(http.ListenAndServe("localhost:808"+stations[i].StationId, handlers[i]))
-	// }
+	startServers()
 
 	// TODO: Получение из БД.
 	go http.HandleFunc("/getCurrentStations", func(w http.ResponseWriter, r *http.Request) {
@@ -111,45 +88,9 @@ func main() {
 		}
 	})
 
-	go http.ListenAndServe(":8080", nil)
-
-	// //TODO: Добавить API для админки.
-	// listener, _ := net.Listen("tcp", "localhost:8081") // открываем слушающий сокет
-	// for {
-	// 	conn, err := listener.Accept() // принимаем TCP-соединение от клиента и создаем новый сокет
-	// 	if err != nil {
-	// 		continue
-	// 	}
-	// 	go handleClient(conn) // обрабатываем запросы клиента в отдельной го-рутине
-	// }
-
+	go http.ListenAndServe(":9090", nil)
 	startSocketServer()
 }
-
-// func handleClient(conn net.Conn) {
-// 	// station := Station{StationId: "1", StationURL: "2", StationImageURL: "3", StationDescription: "4", StationTitle: "Title", CurrentTrackName: "6", CurrentTrackImageURL: "12"}
-// 	// var stations [1]Station
-// 	// stations[0] = station
-// 	answer := SocketAnswer{Event: "stationsDidChange", Stations: stations[:]}
-// 	defer conn.Close() // закрываем сокет при выходе из функции
-// 	for {
-// 		if gotApiRequest {
-// 			if trackDidChange {
-// 				answer = SocketAnswer{Event: "stationsDidChange", Stations: stations[:]}
-// 			}
-// 			if apiRequest == "updateStations" {
-// 				stationsDidChange = true
-// 			}
-// 			jsonResp, err := json.Marshal(answer.Stations)
-// 			if err != nil {
-// 				fmt.Println(err)
-// 				//return
-// 			}
-// 			conn.Write(jsonResp) // пишем в сокет
-// 			gotApiRequest = false
-// 		}
-// 	}
-// }
 
 func chk(err error) {
 	if err != nil {
@@ -169,6 +110,16 @@ func checkDidChange() {
 			}
 			gotApiRequest = false
 		}
+	}
+}
+
+func startServers() {
+	for i := 0; i < len(stations); i++ {
+		newChunk := chunk{}
+		newChunk.buffer = make([]byte, 40000)
+		newChunk.done = make(chan struct{})
+		c = append(c, newChunk)
+		go NewHandler(i)
 	}
 }
 
@@ -220,7 +171,7 @@ func startSocketServer() {
 		server.ServeHTTP(context.Response(), context.Request())
 		return nil
 	})
-	e.Logger.Fatal(e.Start(":8081"))
+	e.Logger.Fatal(e.Start(":9091"))
 }
 
 func socketHandler(s socketio.Conn) {

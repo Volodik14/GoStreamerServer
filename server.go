@@ -12,7 +12,7 @@ func NewHandler(stationId int) {
 		serve(w, r, stationId)
 	})
 	server := http.Server{
-		Addr:    fmt.Sprintf(":%v", 8000+stationId), // :{port}
+		Addr:    fmt.Sprintf(":%v", 9000+stationId), // :{port}
 		Handler: router,
 	}
 	go server.ListenAndServe()
