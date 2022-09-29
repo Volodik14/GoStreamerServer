@@ -102,7 +102,6 @@ func checkDidChange() {
 	for {
 		if gotApiRequest {
 			if apiRequest == "updateStations" {
-				loadData()
 				stationsDidChange = true
 			}
 			if apiRequest == "trackDidChange" {
@@ -118,8 +117,12 @@ func startServers() {
 		newChunk := chunk{}
 		newChunk.buffer = make([]byte, 40000)
 		newChunk.done = make(chan struct{})
-		c = append(c, newChunk)
-		go NewHandler(i)
+		if i > len(c)-1 {
+			c = append(c, newChunk)
+			go NewHandler(i)
+		} else {
+			c[i] = newChunk
+		}
 	}
 }
 
@@ -182,6 +185,8 @@ func socketHandler(s socketio.Conn) {
 			s.Emit("CurrentTrackDidChange", data)
 		}
 		if stationsDidChange {
+			loadData()
+			startServers()
 			stationsDidChange = false
 			s.Emit("StationsDidChange", stations)
 		}
