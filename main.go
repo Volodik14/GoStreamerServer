@@ -52,8 +52,7 @@ func main() {
 
 	startServers()
 
-	// TODO: Получение из БД.
-	go http.HandleFunc("/getCurrentStations", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/getCurrentStations", func(w http.ResponseWriter, r *http.Request) {
 		answer := SocketAnswer{Event: "stationsDidChange", Stations: stations[:]}
 		w.Header().Set("Content-Type", "application/json")
 		if r.Method == "GET" {
@@ -64,6 +63,22 @@ func main() {
 			}
 			w.Write(jsonResp)
 			//json.NewEncoder(w).Encode(station)
+		} else {
+			http.Error(w, "Invalid request method.", 405)
+		}
+	})
+	// TODO: Получение из БД.
+	http.HandleFunc("/setCurrentStations", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method == "POST" {
+			err := json.NewDecoder(r.Body).Decode(&stations)
+			if err != nil {
+				fmt.Println(err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			writeData()
+			startServers()
 		} else {
 			http.Error(w, "Invalid request method.", 405)
 		}
@@ -137,6 +152,11 @@ func loadData() {
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
 	json.Unmarshal(byteValue, &stations)
+}
+
+func writeData() {
+	stationsJson, _ := json.Marshal(stations)
+	ioutil.WriteFile("stations.json", stationsJson, 0644)
 }
 
 func startSocketServer() {
