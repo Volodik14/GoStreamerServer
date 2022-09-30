@@ -78,7 +78,8 @@ func main() {
 				return
 			}
 			writeData()
-			startServers()
+			// Для пуша по сокетам.
+			stationsDidChange = true
 		} else {
 			http.Error(w, "Invalid request method.", 405)
 		}
